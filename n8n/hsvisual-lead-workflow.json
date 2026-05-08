@@ -1,0 +1,177 @@
+{
+  "name": "HS Visual — Lead Capture & WhatsApp",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hsvisual-quiz",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "11111111-aaaa-aaaa-aaaa-000000000001",
+      "name": "Webhook — Quiz",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300],
+      "webhookId": "hsvisual-quiz"
+    },
+
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"ok\", \"message\": \"Lead recebido\" }",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "11111111-aaaa-aaaa-aaaa-000000000002",
+      "name": "Resposta 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 140]
+    },
+
+    {
+      "parameters": {
+        "jsCode": "// ── Entrada: aceita body direto ou aninhado ──────────────────\nconst body = $json.body || $json;\n\nconst rawPhone = (body.phone || body.whatsapp || '').toString();\nconst name     = (body.name  || 'Lead').trim();\nconst segment  = body.segment    || '';\nconst invest   = body.investment || '';\nconst goal     = body.goal       || '';\nconst source   = body.source     || 'hs-visual-quiz';\nconst ts       = body.timestamp  || new Date().toISOString();\n\n// ── Normalização do telefone ──────────────────────────────────\n// 1. Remove tudo que não for dígito\nlet phone = rawPhone.replace(/\\D/g, '');\n// 2. Remove zero à esquerda  (ex: 011... → 11...)\nphone = phone.replace(/^0+/, '');\n// 3. Adiciona DDI 55 se não tiver\nif (!phone.startsWith('55')) {\n  phone = '55' + phone;\n}\n\n// ── Primeiro nome ─────────────────────────────────────────────\nconst firstName = name.split(' ')[0];\n\n// ── Mapa de segmentos ─────────────────────────────────────────\nconst segMap = {\n  'Imobiliário de Luxo'          : 'imóveis de luxo',\n  'Saúde Premium'                : 'saúde premium',\n  'Corporate / B2B'              : 'negócios corporativos',\n  'Lifestyle / Varejo Alto Padrão': 'lifestyle e varejo premium',\n  'Outro'                        : 'seu negócio'\n};\nconst segLabel = segMap[segment] || segment || 'seu negócio';\n\n// ── Mensagem personalizada para o lead ───────────────────────\nconst message =\n  `Olá ${firstName}! 👋\\n\\n` +\n  `Aqui é o Helder da *HS Visual*. Recebi seu interesse em estratégias para *${segLabel}* e fiquei animado!\\n\\n` +\n  `Você está no lugar certo. Trabalhamos exclusivamente com marcas Triple A que querem dominar o mercado com conteúdo de elite.\\n\\n` +\n  `📊 *Próximo passo:*\\n` +\n  `Vou analisar seu perfil e te enviar um diagnóstico personalizado em até 24h.\\n\\n` +\n  `Enquanto isso, me conta: qual é o maior desafio do seu marketing hoje?\\n\\n` +\n  `_Helder Show — HS Visual_\\n` +\n  `_Jundiaí/SP | hsvisual.com_`;\n\n// ── Mensagem de alerta para o Helder ─────────────────────────\nconst alertMsg =\n  `🚀 Novo Lead Qualificado: ${name} do setor ${segment} acabou de finalizar o Quiz!\\n\\n` +\n  `📱 WhatsApp: ${phone}\\n` +\n  `💰 Investimento: ${invest}\\n` +\n  `🎯 Objetivo: ${goal}\\n` +\n  `⏰ ${new Date(ts).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;\n\nreturn [{\n  json: {\n    name,\n    firstName,\n    phoneRaw    : rawPhone,\n    phone,\n    segment,\n    segLabel,\n    investment  : invest,\n    goal,\n    source,\n    timestamp   : ts,\n    capturedAt  : new Date().toISOString(),\n    message,\n    alertMsg\n  }\n}];"
+      },
+      "id": "11111111-aaaa-aaaa-aaaa-000000000003",
+      "name": "Code — Normalizar Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$vars.EVOLUTION_API_URL}}/message/sendText/{{$vars.EVOLUTION_INSTANCE}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey",       "value": "={{$vars.EVOLUTION_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $json.phone }}\",\n  \"textMessage\": {\n    \"text\": \"{{ $json.message }}\"\n  },\n  \"options\": {\n    \"delay\": 1500,\n    \"presence\": \"composing\"\n  }\n}",
+        "options": {
+          "timeout": 15000,
+          "redirect": { "redirect": {} },
+          "response": { "response": {} }
+        }
+      },
+      "id": "11111111-aaaa-aaaa-aaaa-000000000004",
+      "name": "Evolution API — Mensagem ao Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [720, 200]
+    },
+
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$vars.GOOGLE_SHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Data"         : "={{$json.capturedAt}}",
+            "Nome"         : "={{$json.name}}",
+            "WhatsApp"     : "={{$json.phone}}",
+            "Segmento"     : "={{$json.segment}}",
+            "Investimento" : "={{$json.investment}}",
+            "Objetivo"     : "={{$json.goal}}",
+            "Origem"       : "={{$json.source}}"
+          }
+        },
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "11111111-aaaa-aaaa-aaaa-000000000005",
+      "name": "Google Sheets — Salvar Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [720, 400],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SUBSTITUIR_PELO_ID_DA_CREDENCIAL",
+          "name": "Google Sheets — HS Visual"
+        }
+      }
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$vars.EVOLUTION_API_URL}}/message/sendText/{{$vars.EVOLUTION_INSTANCE}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey",       "value": "={{$vars.EVOLUTION_API_KEY}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{$vars.HELDER_WHATSAPP}}\",\n  \"textMessage\": {\n    \"text\": \"{{ $('Code — Normalizar Lead').item.json.alertMsg }}\"\n  },\n  \"options\": {\n    \"delay\": 500\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "11111111-aaaa-aaaa-aaaa-000000000006",
+      "name": "Evolution API — Notificar Helder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [960, 400]
+    }
+  ],
+
+  "connections": {
+    "Webhook — Quiz": {
+      "main": [
+        [
+          { "node": "Resposta 200 OK",        "type": "main", "index": 0 },
+          { "node": "Code — Normalizar Lead", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Code — Normalizar Lead": {
+      "main": [
+        [
+          { "node": "Evolution API — Mensagem ao Lead", "type": "main", "index": 0 },
+          { "node": "Google Sheets — Salvar Lead",      "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Google Sheets — Salvar Lead": {
+      "main": [
+        [
+          { "node": "Evolution API — Notificar Helder", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "HS Visual" },
+    { "name": "Lead Capture" },
+    { "name": "WhatsApp" }
+  ]
+}

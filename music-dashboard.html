@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groove — Music Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Tokens: names from the music world ──────── */
+    :root {
+      --vinyl:       #0c0c0e;      /* page base — concert hall dark */
+      --groove:      #131316;      /* nav, queue panel */
+      --sleeve:      #1a1a1e;      /* cards, hover */
+      --layer:       #212126;      /* top surfaces, dropdowns */
+
+      --needle:      #e09a3e;      /* amber — record store incandescent */
+      --needle-dim:  rgba(224,154,62,.14);
+      --needle-glow: rgba(224,154,62,.07);
+
+      --liner:       rgba(255,255,255,.92);  /* primary text */
+      --liner-2:     rgba(255,255,255,.58);  /* secondary */
+      --liner-3:     rgba(255,255,255,.32);  /* metadata */
+      --liner-muted: rgba(255,255,255,.16);  /* disabled */
+
+      --wire:        rgba(255,255,255,.07);  /* standard border */
+      --wire-soft:   rgba(255,255,255,.04);  /* ghost separator */
+      --wire-em:     rgba(255,255,255,.13);  /* emphasis */
+
+      --up:   #4e9e6e;
+      --warn: #c97b3a;
+
+      --r-xs: 4px;
+      --r-sm: 6px;
+      --r-md: 10px;
+      --r-lg: 14px;
+      --r-xl: 20px;
+
+      --sp: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--vinyl);
+      color: var(--liner);
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── Nav Rail ─────────────────────────────────── */
+    .rail {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      gap: 4px;
+      background: var(--vinyl);
+      border-right: 1px solid var(--wire);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .rail-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--needle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+      cursor: pointer;
+    }
+    .rail-logo::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--vinyl);
+      position: absolute;
+    }
+
+    .rail-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--r-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--liner-3);
+      cursor: pointer;
+      transition: background 100ms, color 100ms;
+      border: none;
+      background: transparent;
+    }
+    .rail-btn:hover { background: var(--sleeve); color: var(--liner-2); }
+    .rail-btn.active { color: var(--needle); background: var(--needle-dim); }
+    .rail-btn svg { width: 17px; height: 17px; }
+
+    .rail-sep {
+      width: 22px;
+      height: 1px;
+      background: var(--wire);
+      margin: 8px 0;
+    }
+
+    .rail-avatar {
+      margin-top: auto;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--sleeve);
+      border: 1px solid var(--wire-em);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--liner-2);
+      cursor: pointer;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Main + Queue ─────────────────────────────── */
+    .main {
+      flex: 1;
+      display: flex;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 32px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      min-width: 0;
+    }
+    .content::-webkit-scrollbar { width: 0; }
+
+    /* ── Page header ──────────────────────────────── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .greeting {
+      font-size: 13px;
+      color: var(--liner-3);
+    }
+
+    .search-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sleeve);
+      border: 1px solid var(--wire);
+      border-radius: 100px;
+      padding: 6px 14px 6px 10px;
+      color: var(--liner-3);
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 120ms;
+    }
+    .search-pill:hover { border-color: var(--wire-em); color: var(--liner-2); }
+    .search-pill svg { width: 13px; height: 13px; }
+
+    /* ── Now Playing Stage ────────────────────────── */
+    .stage {
+      display: grid;
+      grid-template-columns: 188px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .album-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .album-art {
+      width: 188px;
+      height: 188px;
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      border: 1px solid var(--wire);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    /* warm glow — album breathes with what's playing */
+    .album-glow {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: -18px;
+      height: 36px;
+      background: var(--needle);
+      opacity: 0.22;
+      filter: blur(18px);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .track-stage {
+      padding-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .now-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--needle);
+    }
+
+    .track-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--liner);
+      margin-top: 4px;
+    }
+
+    .track-artist {
+      font-size: 13px;
+      color: var(--liner-2);
+      margin-top: 3px;
+    }
+
+    .track-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 100px;
+      background: var(--sleeve);
+      border: 1px solid var(--wire);
+      color: var(--liner-3);
+      letter-spacing: 0.02em;
+    }
+
+    /* Progress */
+    .progress-section { display: flex; flex-direction: column; gap: 7px; }
+
+    .progress-bar {
+      height: 2px;
+      background: var(--wire-em);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+    }
+    .progress-bar:hover .progress-fill::after { opacity: 1; }
+
+    .progress-fill {
+      width: 38%;
+      height: 100%;
+      background: var(--needle);
+      border-radius: 2px;
+      position: relative;
+      transition: width 0.1s;
+    }
+    .progress-fill::after {
+      content: '';
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--needle);
+      position: absolute;
+      right: -5.5px;
+      top: -4.5px;
+      opacity: 0;
+      transition: opacity 100ms;
+    }
+
+    .progress-times {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--liner-3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ctrl {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--liner-3);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color 100ms, background 100ms;
+      flex-shrink: 0;
+    }
+    .ctrl:hover { color: var(--liner-2); background: var(--sleeve); }
+    .ctrl svg { width: 16px; height: 16px; }
+
+    .ctrl-play {
+      width: 44px;
+      height: 44px;
+      background: var(--needle);
+      color: #0c0c0e;
+    }
+    .ctrl-play:hover { background: #d08e32; color: #0c0c0e; }
+    .ctrl-play svg { width: 18px; height: 18px; }
+
+    .ctrl-active { color: var(--needle) !important; }
+
+    .vol-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-left: auto;
+    }
+    .vol-track {
+      width: 68px;
+      height: 2px;
+      background: var(--wire-em);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .vol-fill {
+      width: 65%;
+      height: 100%;
+      background: var(--liner-3);
+      border-radius: 2px;
+    }
+
+    /* ── Section ──────────────────────────────────── */
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sec-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .sec-link {
+      font-size: 11px;
+      color: var(--liner-3);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .sec-link:hover { color: var(--liner-2); }
+
+    /* ── Stats ────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: var(--sleeve);
+      border: 1px solid var(--wire);
+      border-radius: var(--r-lg);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--liner-3);
+    }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      color: var(--liner);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-value.editorial {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: var(--liner-3);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .trend {
+      font-size: 11px;
+      color: var(--up);
+      font-weight: 500;
+    }
+
+    /* ── Track List ───────────────────────────────── */
+    .track-list { display: flex; flex-direction: column; gap: 1px; }
+
+    .track-row {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: var(--r-md);
+      cursor: pointer;
+      transition: background 80ms;
+    }
+    .track-row:hover { background: var(--sleeve); }
+    .track-row.is-playing { background: var(--needle-glow); }
+
+    .track-thumb {
+      width: 38px;
+      height: 38px;
+      border-radius: 5px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .track-meta-col { overflow: hidden; }
+
+    .t-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--liner);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-row.is-playing .t-title { color: var(--needle); }
+
+    .t-artist {
+      font-size: 11px;
+      color: var(--liner-3);
+      margin-top: 2px;
+    }
+
+    .t-dur {
+      font-size: 11px;
+      color: var(--liner-3);
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    /* ── Queue Panel ──────────────────────────────── */
+    .queue {
+      width: 268px;
+      flex-shrink: 0;
+      background: var(--groove);
+      border-left: 1px solid var(--wire);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .queue-head {
+      padding: 28px 20px 16px;
+      border-bottom: 1px solid var(--wire-soft);
+    }
+
+    .queue-title { font-size: 13px; font-weight: 600; }
+    .queue-sub { font-size: 11px; color: var(--liner-3); margin-top: 3px; }
+
+    .queue-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 10px 20px;
+    }
+    .queue-items::-webkit-scrollbar { width: 0; }
+
+    .queue-section {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--liner-muted);
+      padding: 14px 8px 8px;
+    }
+
+    .q-item {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 8px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background 80ms;
+    }
+    .q-item:hover { background: var(--sleeve); }
+
+    .q-thumb {
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .q-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--liner-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .q-artist { font-size: 10px; color: var(--liner-3); margin-top: 2px; }
+    .q-dur { font-size: 10px; color: var(--liner-muted); font-variant-numeric: tabular-nums; }
+
+    /* ── Album art color blocks ───────────────────── */
+    /* Each set simulates album art with abstract color fields */
+    .a1 { background: #2c1848; } .a2 { background: #8a2050; }
+    .a3 { background: #1a3858; } .a4 { background: #e09a3e; }
+
+    .b1 { background: #0f2c1a; } .b2 { background: #3a6840; }
+    .b3 { background: #c4a44e; } .b4 { background: #1c1c2c; }
+
+    .c1 { background: #18183c; } .c2 { background: #48205c; }
+    .c3 { background: #dc3e7e; } .c4 { background: #1c0a0c; }
+
+    .d1 { background: #0a2828; } .d2 { background: #1c5858; }
+    .d3 { background: #4cbcbc; } .d4 { background: #001e1e; }
+
+    .e1 { background: #381808; } .e2 { background: #b84810; }
+    .e3 { background: #f07830; } .e4 { background: #180800; }
+
+    .f1 { background: #180a2c; } .f2 { background: #581060; }
+    .f3 { background: #c030dc; } .f4 { background: #080010; }
+
+    .g1 { background: #0c1c38; } .g2 { background: #1c4870; }
+    .g3 { background: #4890d0; } .g4 { background: #040c18; }
+  </style>
+</head>
+<body>
+
+<!-- Rail -->
+<nav class="rail">
+  <div class="rail-logo" title="Groove"></div>
+
+  <button class="rail-btn active" title="Home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+      <polyline points="9 21 9 12 15 12 15 21"/>
+    </svg>
+  </button>
+
+  <button class="rail-btn" title="Discover">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </button>
+
+  <button class="rail-btn" title="Library">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>
+  </button>
+
+  <div class="rail-sep"></div>
+
+  <button class="rail-btn" title="Liked">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+  </button>
+
+  <button class="rail-btn" title="Artists">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+  </button>
+
+  <div class="rail-avatar">JM</div>
+</nav>
+
+<!-- Main -->
+<div class="main">
+  <div class="content">
+
+    <!-- Header -->
+    <div class="page-header">
+      <span class="greeting">Good evening, João</span>
+      <div class="search-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Search
+        <span style="margin-left:2px; font-size:10px; background:var(--layer); padding:1px 6px; border-radius:3px; border:1px solid var(--wire); color:var(--liner-muted);">⌘K</span>
+      </div>
+    </div>
+
+    <!-- Stage: Now Playing -->
+    <div class="stage">
+      <div class="album-wrap">
+        <div class="album-art">
+          <div class="a1"></div><div class="a2"></div>
+          <div class="a3"></div><div class="a4"></div>
+        </div>
+        <div class="album-glow"></div>
+      </div>
+
+      <div class="track-stage">
+        <div>
+          <div class="now-label">Now Playing</div>
+          <div class="track-title">Midnight in Havana</div>
+          <div class="track-artist">Camila Cabello · Romance</div>
+        </div>
+
+        <div class="track-chips">
+          <span class="chip">Latin Pop</span>
+          <span class="chip">120 BPM</span>
+          <span class="chip">E Minor</span>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <div class="progress-times">
+            <span>1:23</span>
+            <span>3:41</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="ctrl ctrl-active" title="Shuffle on">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+              <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+            </svg>
+          </button>
+
+          <button class="ctrl" title="Previous">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="19 20 9 12 19 4 19 20"/>
+              <rect x="5" y="4" width="2" height="16" rx="1"/>
+            </svg>
+          </button>
+
+          <button class="ctrl ctrl-play" title="Pause">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16" rx="1"/>
+              <rect x="14" y="4" width="4" height="16" rx="1"/>
+            </svg>
+          </button>
+
+          <button class="ctrl" title="Next">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 4 15 12 5 20 5 4"/>
+              <rect x="17" y="4" width="2" height="16" rx="1"/>
+            </svg>
+          </button>
+
+          <button class="ctrl" title="Repeat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"/>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <polyline points="7 23 3 19 7 15"/>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          </button>
+
+          <div class="vol-wrap">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--liner-3)">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            <div class="vol-track"><div class="vol-fill"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div>
+      <div class="sec-head">
+        <span class="sec-title">Your Week</span>
+        <a class="sec-link">Full report</a>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Listening Time</div>
+          <div class="stat-value">14h</div>
+          <div class="stat-sub"><span class="trend">↑ 23%</span> vs last week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tracks Played</div>
+          <div class="stat-value">238</div>
+          <div class="stat-sub">Across 41 artists</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Top Genre</div>
+          <div class="stat-value editorial">Latin Pop</div>
+          <div class="stat-sub">62% of your plays</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recently Played -->
+    <div>
+      <div class="sec-head">
+        <span class="sec-title">Recently Played</span>
+        <a class="sec-link">See all</a>
+      </div>
+      <div class="track-list">
+
+        <div class="track-row is-playing">
+          <div class="track-thumb"><div class="a1"></div><div class="a2"></div><div class="a3"></div><div class="a4"></div></div>
+          <div class="track-meta-col">
+            <div class="t-title">Midnight in Havana</div>
+            <div class="t-artist">Camila Cabello</div>
+          </div>
+          <div class="t-dur">3:41</div>
+        </div>
+
+        <div class="track-row">
+          <div class="track-thumb"><div class="b1"></div><div class="b2"></div><div class="b3"></div><div class="b4"></div></div>
+          <div class="track-meta-col">
+            <div class="t-title">Golden Hour</div>
+            <div class="t-artist">JVKE</div>
+          </div>
+          <div class="t-dur">3:29</div>
+        </div>
+
+        <div class="track-row">
+          <div class="track-thumb"><div class="c1"></div><div class="c2"></div><div class="c3"></div><div class="c4"></div></div>
+          <div class="track-meta-col">
+            <div class="t-title">As It Was</div>
+            <div class="t-artist">Harry Styles</div>
+          </div>
+          <div class="t-dur">2:37</div>
+        </div>
+
+        <div class="track-row">
+          <div class="track-thumb"><div class="d1"></div><div class="d2"></div><div class="d3"></div><div class="d4"></div></div>
+          <div class="track-meta-col">
+            <div class="t-title">Creepin'</div>
+            <div class="t-artist">Metro Boomin, The Weeknd</div>
+          </div>
+          <div class="t-dur">4:02</div>
+        </div>
+
+        <div class="track-row">
+          <div class="track-thumb"><div class="e1"></div><div class="e2"></div><div class="e3"></div><div class="e4"></div></div>
+          <div class="track-meta-col">
+            <div class="t-title">Ella Baila Sola</div>
+            <div class="t-artist">Eslabon Armado, Peso Pluma</div>
+          </div>
+          <div class="t-dur">2:58</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Queue -->
+  <aside class="queue">
+    <div class="queue-head">
+      <div class="queue-title">Up Next</div>
+      <div class="queue-sub">6 tracks · 22 min</div>
+    </div>
+    <div class="queue-items">
+
+      <div class="queue-section">In queue</div>
+
+      <div class="q-item">
+        <div class="q-thumb"><div class="f1"></div><div class="f2"></div><div class="f3"></div><div class="f4"></div></div>
+        <div>
+          <div class="q-title">Flowers</div>
+          <div class="q-artist">Miley Cyrus</div>
+        </div>
+        <div class="q-dur">3:20</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-thumb"><div class="b1"></div><div class="b2"></div><div class="b3"></div><div class="b4"></div></div>
+        <div>
+          <div class="q-title">Golden Hour</div>
+          <div class="q-artist">JVKE</div>
+        </div>
+        <div class="q-dur">3:29</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-thumb"><div class="e1"></div><div class="e2"></div><div class="e3"></div><div class="e4"></div></div>
+        <div>
+          <div class="q-title">La Bebe</div>
+          <div class="q-artist">Yng Lvcas, Peso Pluma</div>
+        </div>
+        <div class="q-dur">2:44</div>
+      </div>
+
+      <div class="queue-section">From your library</div>
+
+      <div class="q-item">
+        <div class="q-thumb"><div class="c1"></div><div class="c2"></div><div class="c3"></div><div class="c4"></div></div>
+        <div>
+          <div class="q-title">Anti-Hero</div>
+          <div class="q-artist">Taylor Swift</div>
+        </div>
+        <div class="q-dur">3:20</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-thumb"><div class="g1"></div><div class="g2"></div><div class="g3"></div><div class="g4"></div></div>
+        <div>
+          <div class="q-title">Unholy</div>
+          <div class="q-artist">Sam Smith, Kim Petras</div>
+        </div>
+        <div class="q-dur">2:37</div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-thumb"><div class="d1"></div><div class="d2"></div><div class="d3"></div><div class="d4"></div></div>
+        <div>
+          <div class="q-title">Rich Flex</div>
+          <div class="q-artist">Drake, 21 Savage</div>
+        </div>
+        <div class="q-dur">3:59</div>
+      </div>
+
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>

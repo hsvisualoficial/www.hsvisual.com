@@ -1,0 +1,9 @@
+PASTA: public/video_maker/
+FORMATO OBRIGATÓRIO: 1080×1350px · Proporção 4:5 · JPG ou WebP (thumbnail)
+VÍDEO: Suba no Mux e use o Playback ID — não coloque .mp4 aqui (muito pesado)
+
+Coloque aqui as thumbnails dos 6 slots da seção "Vídeo Maker de Elite".
+Nomeie os arquivos como: slot-1.jpg, slot-2.jpg ... slot-6.jpg
+
+Para ativar, edite o array videos em app/page.tsx:
+  { id: 1, label: "Imobiliário · São Paulo", imageSrc: "/video_maker/slot-1.jpg", videoSrc: "https://stream.mux.com/SEU_PLAYBACK_ID.m3u8" }

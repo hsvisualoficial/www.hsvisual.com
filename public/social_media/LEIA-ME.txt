@@ -1,0 +1,11 @@
+PASTA: public/social_media/
+FORMATO OBRIGATÓRIO: 1080×1350px · Proporção 4:5 · JPG ou WebP
+
+Coloque aqui as imagens dos 12 slots da seção "Estratégia Visual".
+Nomeie os arquivos como: slot-1.jpg, slot-2.jpg ... slot-12.jpg
+
+Para ativar, edite o array topRow/botRow em app/page.tsx:
+  { id: 1, label: "Imobiliário · São Paulo", imageSrc: "/social_media/slot-1.jpg" }
+
+Para adicionar vídeo no hover, inclua também:
+  videoSrc: "https://stream.mux.com/SEU_PLAYBACK_ID.m3u8"

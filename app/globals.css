@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&family=Playfair+Display+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables — Brandbook V1.1 ──────────────── */
+:root {
+  --void:        #050505;   /* Vazio 01 — preto oficial */
+  --obsidian:    #1C1C1C;   /* Grafite 01 */
+  --gold:        #C5A467;   /* Champagne 01 — cor de marca */
+  --gold-soft:   #8B7251;   /* Champagne 02 */
+  --areia:       #F5F2ED;   /* Areia 01 */
+  --white:       #FFFFFF;
+  --gray:        #A0A0A0;
+  --gold-glow:   rgba(197,164,103,0.12);
+  --wire:        rgba(197,164,103,0.12);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--void);
+  color: var(--white);
+}
+
+body {
+  font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
+  background: var(--void);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Cursor customizado — só em dispositivos pointer:fine ── */
+@media (pointer: fine) {
+  * { cursor: none; }
+}
+
+/* ── Custom scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: rgba(197,164,103,0.18); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(197,164,103,0.35); }
+
+/* ── Selection ────────────────────────────────────── */
+::selection {
+  background: rgba(197,164,103,0.15);
+  color: var(--white);
+}
+
+/* ── Utilities ────────────────────────────────────── */
+@layer utilities {
+
+  /* ─── Sistema Tipográfico — Brandbook V1.1 ─────── */
+
+  /* H1 · Landing Page — Montserrat 200, tracking amplo */
+  .font-display {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-weight: 200;
+    letter-spacing: 0.04em;
+  }
+
+  /* H2 · Destaque — Montserrat 600, tracking médio */
+  .font-display-bold {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  /* Italic accent — Montserrat 400 italic para acentos de seção */
+  .font-display-italic {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  /* Slogan — Cormorant Garamond 300 italic: APENAS "Sonhos que Vendem" */
+  .font-cormorant {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+  }
+
+  /* Body — Montserrat 100/200 para corpo de texto (espaço e silêncio) */
+  .font-body {
+    font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
+  }
+
+  /* Labels UI — Montserrat 600, tracking máximo */
+  .font-label {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Glassmorphism — Física de Vidro ───────────── */
+  .glass {
+    background: rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.65),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow:
+      0 25px 80px rgba(0, 0, 0, 0.70),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  /* Glass hover — premium: gold border glow + vertical lift ultra-smooth */
+  .glass-hover {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    transition:
+      border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow   0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      transform    0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glass-hover:hover {
+    border-color: rgba(197,164,103,0.20);
+    box-shadow:
+      0 28px 80px rgba(0, 0, 0, 0.75),
+      0 0 0 1px rgba(197,164,103,0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transform: translateY(-5px);
+  }
+
+  /* Gold glow text */
+  .text-gold-glow {
+    color: #C5A467;
+    text-shadow: 0 0 30px rgba(197,164,103,0.22), 0 0 80px rgba(197,164,103,0.08);
+  }
+
+  /* Noise overlay */
+  .noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.020'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  /* Gold line accent */
+  .gold-line { position: relative; }
+  .gold-line::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(197,164,103,0.55), transparent);
+  }
+
+  /* ─── Micro-interações Premium ───────────────────── */
+
+  /* Link hover underline elegante */
+  .link-gold {
+    position: relative;
+    color: rgba(197,164,103,0.65);
+    transition: color 0.3s ease;
+  }
+  .link-gold::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 1px;
+    background: #C5A467;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .link-gold:hover { color: #C5A467; }
+  .link-gold:hover::after { width: 100%; }
+
+  /* Reveal da linha dourada horizontal */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(197,164,103,0.30), transparent);
+  }
+}
+
+/* ── Pulse CTA ────────────────────────────────────── */
+@keyframes pulse-cta {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(197,164,103,0); }
+  50%       { box-shadow: 0 0 0 12px rgba(197,164,103,0.08), 0 0 36px rgba(197,164,103,0.05); }
+}
+.pulse-cta {
+  animation: pulse-cta 3.5s ease-in-out infinite;
+}
+
+/* ── Shimmer — brilho automático no CTA ──────────── */
+@keyframes shimmer-sweep {
+  0%   { transform: translateX(-120%) skewX(-12deg); }
+  100% { transform: translateX(220%)  skewX(-12deg); }
+}
+.shimmer-auto {
+  overflow: hidden;
+  position: relative;
+}
+.shimmer-auto::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 80%
+  );
+  animation: shimmer-sweep 4s ease-in-out infinite;
+  animation-delay: 0.8s;
+  pointer-events: none;
+}
+
+/* ── WhatsApp / Helena ping ───────────────────────── */
+@keyframes wa-ping {
+  0%   { transform: scale(1);    opacity: 0.60; }
+  70%  { transform: scale(1.8);  opacity: 0; }
+  100% { transform: scale(1.8);  opacity: 0; }
+}
+.wa-ping {
+  animation: wa-ping 3.2s ease-out infinite;
+  animation-delay: 1.2s;
+}
+
+/* ── Loading reveal ───────────────────────────────── */
+@keyframes reveal-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.reveal-up { animation: reveal-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* ── Gradient borders ─────────────────────────────── */
+.border-gold-gradient {
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.border-gold-gradient::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(197,164,103,0.25), transparent, rgba(197,164,103,0.10));
+  pointer-events: none;
+}
+
+/* ── Cinematic fade-in para seções ───────────────── */
+@keyframes section-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+.section-enter {
+  animation: section-enter 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Button premium interaction ──────────────────── */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  background: #C5A467;
+  color: #050505;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  transition:
+    transform  0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.3s ease;
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(197,164,103,0.20), 0 0 0 1px rgba(197,164,103,0.30);
+}
+.btn-gold:active {
+  transform: translateY(0);
+}

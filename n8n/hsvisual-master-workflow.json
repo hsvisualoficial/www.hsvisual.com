@@ -1,0 +1,142 @@
+{
+  "name": "HS Visual — Master Lead Workflow (Meta API)",
+  "nodes": [
+
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hsvisual-quiz",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-001",
+      "name": "🎯 Webhook — Receber Quiz",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [160, 300],
+      "webhookId": "hsvisual-quiz"
+    },
+
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"ok\" }",
+        "options": { "responseCode": 200 }
+      },
+      "id": "node-002",
+      "name": "✅ Resposta 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [400, 140]
+    },
+
+    {
+      "parameters": {
+        "jsCode": "const b = $json.body || $json;\n\nconst rawPhone   = String(b.phone || b.whatsapp || '');\nconst nome       = String(b.name  || 'Lead').trim();\nconst segmento   = String(b.segment    || '');\nconst investment = String(b.investment || '');\nconst objetivo   = String(b.goal       || '');\nconst origem     = String(b.source     || 'hs-visual-quiz');\nconst ts         = b.timestamp || new Date().toISOString();\n\n// E.164\nlet whatsapp = rawPhone.replace(/\\D/g, '').replace(/^0+/, '');\nif (!whatsapp.startsWith('55')) whatsapp = '55' + whatsapp;\n\n// Normalizar para matching sem acentos\nconst norm = (s) => s.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase();\nconst segNorm = norm(segmento);\nconst invNorm = norm(investment);\n\n// Score investimento\nlet iScore = 0;\nif (invNorm.includes('3k') && invNorm.includes('10k')) iScore = 35;\nelse if (invNorm.includes('10k') && invNorm.includes('30k')) iScore = 65;\nelse if (invNorm.includes('30k') && invNorm.includes('80k')) iScore = 85;\nelse if (invNorm.includes('80k') || invNorm.includes('acima')) iScore = 100;\nelse if (invNorm.includes('3k') || invNorm.includes('ate')) iScore = 10;\n\n// Score segmento\nlet sScore = 0;\nif (segNorm.includes('imobil')) sScore = 25;\nelse if (segNorm.includes('saude')) sScore = 20;\nelse if (segNorm.includes('b2b') || segNorm.includes('corporate')) sScore = 20;\nelse if (segNorm.includes('lifestyle') || segNorm.includes('varejo')) sScore = 15;\nelse sScore = 5;\n\nconst score = Math.min(iScore + sScore, 100);\nconst tempEmoji = score >= 80 ? '🔴' : score >= 50 ? '🟡' : '🔵';\nconst tempLabel = score >= 80 ? 'HOT' : score >= 50 ? 'WARM' : 'COLD';\nconst firstName = nome.split(' ')[0];\n\n// Mensagem personalizada ao lead\nlet base;\nif (segNorm.includes('imobil')) {\n  base = 'Ola ' + firstName + '! 🏠\\n\\nVi que voce atua com *imoveis de luxo* e seu objetivo e *' + objetivo + '*.' + '\\n\\n📈 Clientes do segmento imobiliario na HS Visual chegaram a +292% em leads qualificados. Voce esta no lugar certo!';\n} else if (segNorm.includes('saude')) {\n  base = 'Ola ' + firstName + '! 🏥\\n\\nVi que voce atua com *saude premium* e seu objetivo e *' + objetivo + '*.' + '\\n\\n📈 Clinicas parceiras da HS Visual triplicaram o numero de consultas em 90 dias.';\n} else if (segNorm.includes('b2b') || segNorm.includes('corporate')) {\n  base = 'Ola ' + firstName + '! 💼\\n\\nVi que voce atua no mercado *corporate* e seu objetivo e *' + objetivo + '*.' + '\\n\\n📈 Empresas B2B na HS Visual reduziram o ciclo de vendas em ate 40%.';\n} else if (segNorm.includes('lifestyle') || segNorm.includes('varejo')) {\n  base = 'Ola ' + firstName + '! ✨\\n\\nVi que voce atua no *lifestyle premium* e seu objetivo e *' + objetivo + '*.' + '\\n\\n📈 Marcas de alto padrao convertem ate 8x mais com conteudo de elite.';\n} else {\n  base = 'Ola ' + firstName + '! 👋\\n\\nVi que seu objetivo e *' + objetivo + '* — voce esta no lugar certo.';\n}\n\nconst mensagem = base +\n  '\\n\\n📊 *Proximo passo:* vou analisar seu perfil e te enviar um diagnostico personalizado em ate 24h.' +\n  '\\n\\n💬 Me conta: qual e o maior desafio do seu marketing hoje?' +\n  '\\n\\n_Helder Show — HS Visual | Jundiai/SP | hsvisual.com_';\n\n// Alerta interno com emojis e espacamento\nconst horario = new Date(ts).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });\nconst alertMsg =\n  '🚀 *NOVO LEAD QUALIFICADO!*\\n\\n' +\n  '👤 *Nome:* ' + nome + '\\n' +\n  '🏢 *Segmento:* ' + segmento + '\\n' +\n  tempEmoji + ' *Score:* ' + score + '/100 — ' + tempLabel + '\\n\\n' +\n  '📱 *WhatsApp:* wa.me/' + whatsapp + '\\n' +\n  '💰 *Investimento:* ' + investment + '\\n' +\n  '🎯 *Objetivo:* ' + objetivo + '\\n\\n' +\n  '⏰ *Horario:* ' + horario;\n\nreturn [{ json: {\n  nome, firstName, whatsapp, segmento,\n  investimento: investment, objetivo, origem,\n  score, temperatura: tempLabel, mensagem, alertMsg,\n  created_at: new Date().toISOString()\n}}];"
+      },
+      "id": "node-003",
+      "name": "⚙️ Code — Normalizar + Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://avdtbcxoblolryjaxnsx.supabase.co/rest/v1/leads_projeto_3000",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey",        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZHRiY3hvYmxvbHJ5amF4bnN4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzMyNzY5NCwiZXhwIjoyMDkyOTAzNjk0fQ.YObY-Xkbbc1ZXRa9uA4aI2mCd6DAm5WJHTtN8kA8NTE" },
+            { "name": "Authorization", "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZHRiY3hvYmxvbHJ5amF4bnN4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzMyNzY5NCwiZXhwIjoyMDkyOTAzNjk0fQ.YObY-Xkbbc1ZXRa9uA4aI2mCd6DAm5WJHTtN8kA8NTE" },
+            { "name": "Content-Type",  "value": "application/json" },
+            { "name": "Prefer",        "value": "return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ nome: $json.nome, whatsapp: $json.whatsapp, segmento: $json.segmento, investimento: $json.investimento, objetivo: $json.objetivo, origem: $json.origem, score: $json.score, temperatura: $json.temperatura, mensagem: $json.mensagem, created_at: $json.created_at }) }}",
+        "options": { "timeout": 10000 }
+      },
+      "id": "node-004",
+      "name": "🗄️ Supabase — INSERT leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [660, 200]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v25.0/1043988878788991/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "Bearer EABD24UZBCfNgBReXRwnL0Va5ZBaHdbRhZBtUW2pi1ji9f05KGpz9HZBUHxIFgFgOng4PlHoxfKzVaW5fnTPspkynXce0h0ijmqUw40V9HDvPDcPOzuKOawOp4mBnn2b0mJ8tsGt6nNRrZBDOrQuzd6ZCxsbwL6CufemQy0MbHPGh68ZBbEG6kO1gtgo8JrSYQZBnXgZDZD" },
+            { "name": "Content-Type",  "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ messaging_product: 'whatsapp', to: $('⚙️ Code — Normalizar + Score').item.json.whatsapp, type: 'text', text: { body: $('⚙️ Code — Normalizar + Score').item.json.mensagem } }) }}",
+        "options": { "timeout": 15000 }
+      },
+      "id": "node-005",
+      "name": "💬 Meta API — Mensagem ao Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [660, 400]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v25.0/1043988878788991/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "Bearer EABD24UZBCfNgBReXRwnL0Va5ZBaHdbRhZBtUW2pi1ji9f05KGpz9HZBUHxIFgFgOng4PlHoxfKzVaW5fnTPspkynXce0h0ijmqUw40V9HDvPDcPOzuKOawOp4mBnn2b0mJ8tsGt6nNRrZBDOrQuzd6ZCxsbwL6CufemQy0MbHPGh68ZBbEG6kO1gtgo8JrSYQZBnXgZDZD" },
+            { "name": "Content-Type",  "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ messaging_product: 'whatsapp', to: '5511953611000', type: 'text', text: { body: $('⚙️ Code — Normalizar + Score').item.json.alertMsg } }) }}",
+        "options": { "timeout": 10000 }
+      },
+      "id": "node-006",
+      "name": "🔔 Meta API — Notificar Helder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [920, 300]
+    }
+
+  ],
+
+  "connections": {
+    "🎯 Webhook — Receber Quiz": {
+      "main": [[
+        { "node": "✅ Resposta 200 OK",           "type": "main", "index": 0 },
+        { "node": "⚙️ Code — Normalizar + Score", "type": "main", "index": 0 }
+      ]]
+    },
+    "⚙️ Code — Normalizar + Score": {
+      "main": [[
+        { "node": "🗄️ Supabase — INSERT leads",    "type": "main", "index": 0 },
+        { "node": "💬 Meta API — Mensagem ao Lead", "type": "main", "index": 0 }
+      ]]
+    },
+    "🗄️ Supabase — INSERT leads": {
+      "main": [[
+        { "node": "🔔 Meta API — Notificar Helder", "type": "main", "index": 0 }
+      ]]
+    }
+  },
+
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "tags": [{ "name": "HS Visual" }, { "name": "Meta API" }]
+}
