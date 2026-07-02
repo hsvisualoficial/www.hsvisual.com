@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -152,7 +153,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   );
 }
 
-const LOGO_SRC = "https://res.cloudinary.com/dubbc2scp/image/upload/v1777402760/01_hs_visual_logo_3d_jewelry-removebg-preview_n7txjl.png";
+const LOGO_SRC = "/bio_auth/LOGO HS VISUAL - 1920 x 1080 - SEM FUNDO.png";
 
 const NAV_LINKS = [
   { label: "Anúncios",     anchor: "resultados" },
@@ -266,7 +267,6 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-6 relative flex items-center justify-between">
         {/* Logo — esquerda */}
         <a href="/" aria-label="HS Visual — Home" className="flex items-center py-1 shrink-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={LOGO_SRC}
             alt="HS Visual"
@@ -274,7 +274,6 @@ function Navbar() {
               height: 40,
               width: "auto",
               display: "block",
-              filter: "url(#nobg)",
               opacity: logoReady ? 1 : 0,
               transition: "opacity 0.35s ease",
             }}
@@ -428,7 +427,12 @@ function Hero() {
             className="flex items-center gap-3"
           >
             <div className="flex items-center">
-              {[null, null, null, null].map((_, i) => (
+              {[
+                "/social_media/ORGANIZAGRAM BY CAROL RHEIN (20).png",
+                "/social_media/ORGANIZAGRAM BY CAROL RHEIN (15).png",
+                "/social_media/ORGANIZAGRAM BY CAROL RHEIN (18).png",
+                "/social_media/ORGANIZAGRAM BY CAROL RHEIN (17).png",
+              ].map((src, i) => (
                 <div key={i} className="rounded-full border-2 overflow-hidden flex-shrink-0"
                   style={{
                     width: 28, height: 28,
@@ -436,6 +440,9 @@ function Hero() {
                     borderColor: "#050505",
                     background: `rgba(197,164,103,${0.12 + i * 0.06})`,
                     zIndex: 4 - i, position: "relative",
+                    backgroundImage: `url(${src})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                   }} />
               ))}
             </div>
@@ -443,7 +450,7 @@ function Hero() {
               <div className="font-body font-semibold" style={{ fontSize: "0.70rem", color: "#C5A467" }}>
                 +R$ 10.000.000
               </div>
-              <div className="font-body font-light" style={{ fontSize: "0.62rem", color: "#555", lineHeight: 1.3 }}>
+              <div className="font-body font-light" style={{ fontSize: "0.62rem", color: "#9CA3AF", lineHeight: 1.3 }}>
                 gerados para nossos clientes
               </div>
             </div>
@@ -593,7 +600,7 @@ function EstrategiaSection() {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/55 mb-5">
+            <div className="font-body text-[12px] tracking-[0.3em] uppercase text-gold mb-5 font-medium">
               Por que 9 em 10 campanhas de tráfego pago não convertem
             </div>
             <h2
