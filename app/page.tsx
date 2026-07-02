@@ -1680,7 +1680,6 @@ function SocialSection() {
 type VideoItem = {
   id: number;
   label: string;
-  imageSrc?: string;
   videoSrc?: string;
 };
 
@@ -1689,51 +1688,21 @@ const VM_W = 180;
 const VM_H = 320;
 
 function VideoCard({ v }: { v: VideoItem }) {
-  const [playing, setPlaying] = useState(false);
   const [hover, setHover] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const hlsRef   = useRef<import("hls.js").default | null>(null);
-  const src      = v.videoSrc;
+  const src = v.videoSrc;
 
-  useEffect(() => {
-    if (!src || !videoRef.current) return;
-    const video = videoRef.current;
-    const s = src; // narrow string | undefined → string for use inside async closure
+  // Constrói URL oficial do embed Bunny a partir do playback GUID.
+  // Aceita tanto URL completa do player quanto GUID puro.
+  const embedBase = src
+    ? src.includes("player.mediadelivery.net")
+      ? src.replace("/play/", "/embed/").replace(/\/$/, "")
+      : `https://player.mediadelivery.net/embed/695508/${src}`
+    : null;
 
-    async function init() {
-      const isHLS = s.endsWith(".m3u8") || s.includes("stream.mux.com");
-      if (isHLS) {
-        const Hls = (await import("hls.js")).default;
-        if (Hls.isSupported()) {
-          hlsRef.current = new Hls({ startLevel: -1, maxBufferLength: 10 });
-          hlsRef.current.loadSource(s);
-          hlsRef.current.attachMedia(video);
-          hlsRef.current.on(Hls.Events.MANIFEST_PARSED, () => { video.currentTime = 0; });
-        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          video.src = s;
-        }
-      } else {
-        video.src = s;
-      }
-    }
-
-    init();
-    return () => { hlsRef.current?.destroy(); hlsRef.current = null; setPlaying(false); };
-  }, [src]);
-
-  const handleClick = () => {
-    const video = videoRef.current;
-    if (!video || !src) return;
-    if (playing) {
-      video.pause();
-      video.muted = true;
-      setPlaying(false);
-    } else {
-      video.muted = false;
-      video.play().catch(() => {});
-      setPlaying(true);
-    }
-  };
+  // Player limpo, sem auto-play (decisão do usuário), sem loop, mudo
+  const embedUrl = embedBase
+    ? `${embedBase}?autoplay=false&muted=true&loop=false&playsinline=true&preload=true`
+    : null;
 
   return (
     <div
@@ -1750,46 +1719,22 @@ function VideoCard({ v }: { v: VideoItem }) {
           : "0 20px 60px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.04), 0 4px 16px rgba(0,0,0,0.4)",
         transform: hover ? "translateY(-6px) scale(1.025)" : "translateY(0) scale(1)",
         transition: "transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease",
-        cursor: src ? "pointer" : "default",
       }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      onClick={handleClick}
     >
-      {/* Thumbnail — shown while not playing */}
-      {v.imageSrc && !playing && (
-        <img
-          src={v.imageSrc}
-          alt={v.label}
+      {/* Iframe Bunny — player real, sempre montado, ocupa 100% */}
+      {embedUrl ? (
+        <iframe
+          src={embedUrl}
+          title={`${v.label} — vídeo HS Visual`}
           loading="lazy"
-          decoding="async"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowFullScreen
           className="absolute inset-0 w-full h-full"
-          style={{ objectFit: "cover", objectPosition: "center" }}
+          style={{ border: 0, background: "#050505" }}
         />
-      )}
-
-      {/* Video — always mounted if videoSrc; shows first frame; plays on click */}
-      {src && (
-        <video
-          ref={videoRef}
-          playsInline
-          muted
-          loop
-          preload="metadata"
-          onLoadedMetadata={() => { if (videoRef.current) videoRef.current.currentTime = 0.01; }}
-          className="absolute inset-0 w-full h-full"
-          style={{
-            objectFit: "cover",
-            objectPosition: "center",
-            opacity: v.imageSrc && !playing ? 0 : 1,
-            transition: "opacity 0.4s",
-          }}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Placeholder — shown when no src configured */}
-      {!src && (
+      ) : (
         <div
           className="absolute inset-0"
           style={{
@@ -1799,28 +1744,6 @@ function VideoCard({ v }: { v: VideoItem }) {
           }}
         />
       )}
-
-      {/* Play / Pause button */}
-      <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        style={{ opacity: hover ? 1 : 0.55, transition: "opacity 0.3s" }}
-      >
-        <div
-          className="w-14 h-14 rounded-full border border-gold/50 flex items-center justify-center backdrop-blur-sm bg-void/50"
-          style={{ boxShadow: "0 0 24px rgba(197,164,103,0.25)" }}
-        >
-          {playing ? (
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#C5A467">
-              <rect x="6" y="4" width="4" height="16" rx="1"/>
-              <rect x="14" y="4" width="4" height="16" rx="1"/>
-            </svg>
-          ) : (
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#C5A467" style={{ marginLeft: 2 }}>
-              <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-          )}
-        </div>
-      </div>
 
       {/* Gold left accent on hover */}
       <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-gold/45 to-transparent pointer-events-none"
@@ -1837,14 +1760,14 @@ function VideoCard({ v }: { v: VideoItem }) {
 // ── Audiovisual Section (Marquee Interativa) ──────────────────────
 function AudiovisualSection() {
   const videos: VideoItem[] = [
-    { id: 1, label: "Imobiliário · São Paulo",   videoSrc: "https://player.mediadelivery.net/play/695508/e2a645c3-7af9-4a7d-979e-f72d5bb69907" },
-    { id: 2, label: "Veduta Residencial",         videoSrc: "https://player.mediadelivery.net/play/695508/b96711b3-ea9c-4bc4-9afc-4e8c599c9d6e" },
-    { id: 3, label: "Felipe Corretor · Drone",   videoSrc: "https://player.mediadelivery.net/play/695508/04f363de-735c-4fbe-b70b-5b577c46c151" },
-    { id: 4, label: "Lifestyle · Alto Padrão",   videoSrc: "https://player.mediadelivery.net/play/695508/340e9e5a-9e47-4fa7-a5c7-23842c1c687e" },
-    { id: 5, label: "Colinas do Mosteiro",        videoSrc: "https://player.mediadelivery.net/play/695508/05c97387-7d2e-4807-b3b3-f55d7d97ceb3" },
-    { id: 6, label: "Reserva Ermida",             videoSrc: "https://player.mediadelivery.net/play/695508/4a28cb09-4a5b-46b2-9302-8fc70d6b5c7c" },
-    { id: 7, label: "Vila Rica · Indaiatuba",        videoSrc: "https://player.mediadelivery.net/play/695508/60c63f91-aac7-464b-959f-cd50fd68db72" },
-    { id: 8, label: "Helvetia Park · Indaiatuba", videoSrc: "https://player.mediadelivery.net/play/695508/9eec0a0d-fb75-47e5-ae10-ac56e3eec1ae" },
+    { id: 1, label: "Imobiliário · São Paulo",    videoSrc: "e2a645c3-7af9-4a7d-979e-f72d5bb69907" },
+    { id: 2, label: "Veduta Residencial",         videoSrc: "b96711b3-ea9c-4bc4-9afc-4e8c599c9d6e" },
+    { id: 3, label: "Felipe Corretor · Drone",    videoSrc: "04f363de-735c-4fbe-b70b-5b577c46c151" },
+    { id: 4, label: "Lifestyle · Alto Padrão",    videoSrc: "340e9e5a-9e47-4fa7-a5c7-23842c1c687e" },
+    { id: 5, label: "Colinas do Mosteiro",        videoSrc: "05c97387-7d2e-4807-b3b3-f55d7d97ceb3" },
+    { id: 6, label: "Reserva Ermida",             videoSrc: "4a28cb09-4a5b-46b2-9302-8fc70d6b5c7c" },
+    { id: 7, label: "Vila Rica · Indaiatuba",     videoSrc: "60c63f91-aac7-464b-959f-cd50fd68db72" },
+    { id: 8, label: "Helvetia Park · Indaiatuba", videoSrc: "9eec0a0d-fb75-47e5-ae10-ac56e3eec1ae" },
   ];
 
   // 3 cópias — loop seamless sem tranco
