@@ -182,6 +182,23 @@ export default function RootLayout({
                     },
                   ],
                 },
+                {
+                  "@type": "VideoObject",
+                  "@id": "https://hsvisual.com/#video-1",
+                  "name": "Case Tráfego Pago: Imobiliária São Paulo — Meta Ads com ROAS 8.4×",
+                  "description": "Vídeo case de sucesso: gestão profissional de tráfego pago e Meta Ads para imobiliária em São Paulo. Demonstra estratégia completa de lead generation e automação de vendas.",
+                  "uploadDate": "2026-07-02",
+                  "duration": "PT5M",
+                  "thumbnailUrl": "https://player.mediadelivery.net/play/695508/e2a645c3-7af9-4a7d-979e-f72d5bb69907",
+                  "contentUrl": "https://player.mediadelivery.net/play/695508/e2a645c3-7af9-4a7d-979e-f72d5bb69907",
+                  "embedUrl": "https://player.mediadelivery.net/play/695508/e2a645c3-7af9-4a7d-979e-f72d5bb69907",
+                  "keywords": "tráfego pago,meta ads,google ads,imobiliário,case de sucesso,lead generation",
+                  "publication": {
+                    "@type": "BroadcastEvent",
+                    "name": "HS Visual — Vídeo Maker de Elite",
+                    "isLiveNow": false,
+                  },
+                },
               ],
             }),
           }}

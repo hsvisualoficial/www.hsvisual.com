@@ -297,6 +297,7 @@ function Navbar() {
         <button
           onClick={() => openQuizModal()}
           className="shrink-0 text-xs font-body font-medium tracking-[0.2em] uppercase border border-gold/40 hover:border-gold hover:shadow-gold-sm hover:-translate-y-0.5 text-gold px-5 py-2 rounded transition-all duration-300"
+          aria-label="Agendar consultoria de tráfego pago — diagnóstico gratuito com gestor especializado em Meta Ads"
         >
           Consultoria
         </button>
@@ -316,7 +317,7 @@ function Hero() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={HELDER_PHOTO_A}
-        alt="Helder Show — Estrategista HS Visual"
+        alt="Helder Show — Estrategista em Tráfego Pago, Meta Ads e Automação de Vendas para Marcas de Luxo"
         className="absolute inset-0 w-full h-full select-none pointer-events-none"
         style={{ objectFit: "cover", objectPosition: "62% 10%" }}
         draggable={false}
@@ -396,6 +397,7 @@ function Hero() {
             transition={{ delay: 0.65, duration: 0.65 }}
             onClick={() => openQuizModal()}
             className="shimmer-auto pulse-cta font-body font-medium uppercase rounded transition-all duration-300 hover:-translate-y-1 hover:shadow-gold-md"
+            aria-label="Quero escalar meu negócio com tráfego pago profissional — Meta Ads e Google Ads estratégico"
             style={{
               background: "#C5A467",
               color: "#050505",
@@ -1737,6 +1739,8 @@ function VideoCard({ v }: { v: VideoItem }) {
     <div
       data-magnetic
       className="flex-shrink-0 relative overflow-hidden rounded-3xl select-none"
+      title={`${v.label} — Video case de tráfego pago e Meta Ads estratégico`}
+      aria-label={`Vídeo: ${v.label}. Case de sucesso em tráfego pago, gestão de Meta Ads, Google Ads e automação de leads. ROAS comprovado 8.4×.`}
       style={{
         width: VM_W,
         height: VM_H,
@@ -2328,7 +2332,7 @@ function StrategistSection() {
             <div className="relative rounded-3xl overflow-hidden" style={{ aspectRatio: "3/4", maxWidth: 460 }}>
               <img
                 src="/bio_auth/Helder Show.png"
-                alt="Helder Show — Estrategista Visual"
+                alt="Helder Show — Fundador de Agência de Tráfego Pago, Especialista em Meta Ads, Google Ads e Automação de Lead Generation para Imobiliárias e Marcas Premium"
                 loading="lazy"
                 decoding="async"
                 className="absolute inset-0 w-full h-full rounded-3xl"

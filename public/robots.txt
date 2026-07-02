@@ -1,0 +1,40 @@
+# HS Visual — Configuração de crawlers
+# Permite indexação total para Google, ChatGPT, Perplexity e IAs
+
+User-agent: *
+Allow: /
+Allow: /api/
+Disallow: /admin/
+Disallow: /.env
+
+# Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# OpenAI / ChatGPT
+User-agent: OAI-SearchBot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Apple Siri
+User-agent: Applebot
+Allow: /
+
+# Meta AI
+User-agent: facebookexternalhit
+Allow: /
+
+# Sitemap
+Sitemap: https://hsvisual.com/sitemap.xml
