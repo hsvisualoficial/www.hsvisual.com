@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MagneticCursor from "@/components/MagneticCursor";
 import HelenaChat from "@/components/HelenaChat";
 
-const HELDER_PHOTO_A = "https://res.cloudinary.com/dubbc2scp/image/upload/q_auto,f_auto/v1777647126/ChatGPT_Image_1_05_2026_11_49_43_epgeqx.png";
+const HELDER_PHOTO_A = "/bio_auth/ChatGPT Image 1_05_2026, 11_49_43.png";
 const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL ?? "https://seu-n8n.dominio.com/webhook/hsvisual-quiz";
 
 // Global quiz modal trigger — suporta serviço pré-selecionado
@@ -369,6 +369,17 @@ function Hero() {
             em uma Máquina de Vendas.
           </h2>
 
+          {/* Micro-linha descritiva — contexto técnico sutil */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.25, duration: 0.8 }}
+            className="font-body font-light text-gold mb-6"
+            style={{ fontSize: "0.7rem", letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.55 }}
+          >
+            Tráfego Pago · Automação 24h · IA
+          </motion.div>
+
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -475,6 +486,71 @@ function Hero() {
   );
 }
 
+// ── Faixa Sutil Pós-Hero — Clareza Técnica + Tagline ─────────────
+function BrandStripSection() {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+      className="relative px-6 overflow-hidden"
+      style={{
+        height: "60px",
+        background: "linear-gradient(90deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.98) 50%, rgba(5,5,5,1) 100%)",
+        borderBottom: "1px solid rgba(197,164,103,0.08)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+        {/* Descrição técnica — esquerda */}
+        <div className="flex-1 flex items-center gap-3">
+          <span
+            className="font-body text-cream/35"
+            style={{ fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase" }}
+          >
+            Agência de Marketing Digital
+          </span>
+          <span className="text-cream/15">·</span>
+          <span
+            className="font-body text-cream/35"
+            style={{ fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase" }}
+          >
+            Tráfego Pago · Automação
+          </span>
+        </div>
+
+        {/* Ícones centrais — 35% opacidade */}
+        <div className="flex items-center gap-4 opacity-35">
+          {/* Google Ads icon */}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-gold">
+            <path d="M8 2H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 12H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2zm12-12h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 12h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2z" />
+          </svg>
+          {/* Meta Ads icon */}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-gold">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+          </svg>
+          {/* IA icon */}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-gold">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+          </svg>
+        </div>
+
+        {/* Tagline institucional — direita */}
+        <div className="flex-1 text-right">
+          <span
+            className="font-cormorant text-gold/60"
+            style={{ fontSize: "14px", fontStyle: "italic", fontWeight: 300, letterSpacing: "0.05em" }}
+          >
+            Sonhos que Vendem
+          </span>
+        </div>
+      </div>
+    </motion.section>
+  );
+}
+
 // ── Estratégia Section ────────────────────────────────────────────
 function EstrategiaSection() {
   const pillars = [
@@ -518,7 +594,7 @@ function EstrategiaSection() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/55 mb-5">
-              Por que 9 em 10 campanhas não convertem
+              Por que 9 em 10 campanhas de tráfego pago não convertem
             </div>
             <h2
               className="font-display text-cream mb-5"
@@ -926,6 +1002,15 @@ function MetodologiaSection() {
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15, duration: 0.7 }}
+            className="font-body font-light text-gold/40 mb-6"
+            style={{ fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase" }}
+          >
+            Gestão de Anúncios · Automação de Leads · Conteúdo Estratégico
+          </motion.p>
+          <motion.p
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
@@ -1427,20 +1512,20 @@ function SocialSection() {
   const topCtrl = useRef<{ nudge: (d: number) => void } | null>(null);
   const botCtrl = useRef<{ nudge: (d: number) => void } | null>(null);
 
-  // All 12 unique images
+  // All 12 unique images — agora com caminhos locais em /public/social_media/
   const allImages: AdItem[] = [
-    { id: 1,  label: "Imobiliário · São Paulo",  imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265782/Portugu%C3%AAs_Portugu%C3%AAs_ayzbjj.png" },
-    { id: 2,  label: "Clínica Estética · Rio",   imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265763/ORGANIZADOR_CORRETOR_ORGANIZAGRAM_n3hakt.png" },
-    { id: 3,  label: "Corporate · Fintech",       imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265761/Modelo_lan%C3%A7amento_9_kzxmel.png" },
-    { id: 4,  label: "Lifestyle · Alto Padrão",  imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265761/Modelo_lan%C3%A7amento_4_umjciy.png" },
-    { id: 5,  label: "Real Estate · Litoral",    imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265423/3.ORGANIZAGRAM_xhvxkx.png" },
-    { id: 6,  label: "Dermatologia Premium",     imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265734/91_fyexll.png" },
-    { id: 7,  label: "Odontologia Premium",      imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265735/95_vajqrc.png" },
-    { id: 8,  label: "Imóvel · Jardins SP",      imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265423/4.POST_QUEM_SOU_EU_BY_CAROL_RHEIN_3_srsdoy.png" },
-    { id: 9,  label: "Academia Premium",          imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265779/ORGANIZAGRAM_BY_CAROL_RHEIN_crlrcw.png" },
-    { id: 10, label: "Joalheria · Luxo",          imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265425/2.POST_QUEM_SOU_EU_BY_CAROL_RHEIN_2_ag5evu.png" },
-    { id: 11, label: "Hotel Boutique",            imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265429/37_cbmgzl.png" },
-    { id: 12, label: "Cirurgia Plástica",         imageSrc: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777265421/1.POST_QUEM_SOU_EU_BY_CAROL_RHEIN_dcqjsl.png" },
+    { id: 1,  label: "Imobiliário · São Paulo",  imageSrc: "/social_media/Português.png" },
+    { id: 2,  label: "Clínica Estética · Rio",   imageSrc: "/social_media/ORGANIZAGRAM BY CAROL RHEIN (15).png" },
+    { id: 3,  label: "Corporate · Fintech",       imageSrc: "/social_media/Modelo lançamento (9).png" },
+    { id: 4,  label: "Lifestyle · Alto Padrão",  imageSrc: "/social_media/Modelo lançamento (4).png" },
+    { id: 5,  label: "Real Estate · Litoral",    imageSrc: "/social_media/ORGANIZAGRAM BY CAROL RHEIN (6).png" },
+    { id: 6,  label: "Dermatologia Premium",     imageSrc: "/social_media/77.png" },
+    { id: 7,  label: "Odontologia Premium",      imageSrc: "/social_media/18.png" },
+    { id: 8,  label: "Imóvel · Jardins SP",      imageSrc: "/social_media/4.POST QUEM SOU EU BY CAROL RHEIN (3).png" },
+    { id: 9,  label: "Academia Premium",          imageSrc: "/social_media/ORGANIZAGRAM BY CAROL RHEIN.png" },
+    { id: 10, label: "Joalheria · Luxo",          imageSrc: "/social_media/2.POST QUEM SOU EU BY CAROL RHEIN (2).png" },
+    { id: 11, label: "Hotel Boutique",            imageSrc: "/social_media/119.png" },
+    { id: 12, label: "Cirurgia Plástica",         imageSrc: "/social_media/1.POST QUEM SOU EU BY CAROL RHEIN.png" },
   ];
 
   // ── Faixa inferior — 12 assets independentes (Helder: substitua as URLs abaixo) ──
@@ -2235,7 +2320,7 @@ function StrategistSection() {
             className="relative">
             <div className="relative rounded-3xl overflow-hidden" style={{ aspectRatio: "3/4", maxWidth: 460 }}>
               <img
-                src="https://res.cloudinary.com/dubbc2scp/image/upload/v1777274657/Helder_Show_rvho2z.png"
+                src="/bio_auth/Helder Show.png"
                 alt="Helder Show — Estrategista Visual"
                 loading="lazy"
                 decoding="async"
@@ -2321,6 +2406,16 @@ function SystemsSection() {
               <br />
               <span className="font-display-italic text-gold">não dormem</span>
             </h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="font-body font-light text-gold/45 mb-4"
+              style={{ fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase" }}
+            >
+              Automação 24h · IA · CRM
+            </motion.p>
             <p className="font-body font-light text-cream/50 leading-relaxed max-w-md mb-8">
               Às 2h da manhã, um lead clica no seu anúncio. Em menos de 2 minutos, ele recebe resposta, é qualificado e — se for comprador — chega até você pronto para fechar. Tudo automático.
             </p>
@@ -2463,6 +2558,91 @@ function FAQ() {
         </div>
       ))}
     </div>
+  );
+}
+
+// ── Frentes de Trabalho Section ────────────────────────────────────
+function FrentesSection() {
+  const frentes = [
+    {
+      icon: "◎",
+      title: "Tráfego Pago",
+      services: "Meta Ads · Google Ads",
+      metric: "ROAS 8.4×",
+      hue: 38,
+    },
+    {
+      icon: "◈",
+      title: "Social Media",
+      services: "Conteúdo Estratégico",
+      metric: "Taxa Retenção 95%",
+      hue: 210,
+    },
+    {
+      icon: "✦",
+      title: "Automação",
+      services: "IA · CRM · 24h",
+      metric: "Resposta em 2 min",
+      hue: 280,
+    },
+  ];
+
+  return (
+    <section className="py-8 px-6 border-t border-cream/5">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <motion.h3
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="font-display text-cream mb-2"
+            style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+          >
+            Nossas <span className="font-display-italic text-gold">Frentes</span>
+          </motion.h3>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15, duration: 0.6 }}
+            className="font-body font-light text-cream/35 text-sm"
+          >
+            Três pilares integrados para dominar seu mercado
+          </motion.p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {frentes.map((f, i) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="glass rounded-2xl p-6 border border-cream/8 hover:border-gold/20 transition-all duration-400 group"
+            >
+              <div
+                className="w-12 h-12 rounded-lg flex items-center justify-center text-gold text-xl mb-4 transition-all duration-400"
+                style={{
+                  background: "rgba(197,164,103,0.08)",
+                  border: "1px solid rgba(197,164,103,0.14)",
+                  boxShadow: `0 0 16px rgba(${Math.floor(Math.cos(f.hue * Math.PI / 180) * 200)}, ${Math.floor(Math.cos((f.hue - 120) * Math.PI / 180) * 200)}, ${Math.floor(Math.cos((f.hue - 240) * Math.PI / 180) * 200)}, 0.08)`,
+                }}
+              >
+                {f.icon}
+              </div>
+              <h4 className="font-body font-medium text-cream/85 text-sm mb-1">{f.title}</h4>
+              <p className="font-body font-light text-cream/40 text-xs mb-4">{f.services}</p>
+              <div className="inline-flex items-center gap-1.5 bg-gold/6 border border-gold/15 rounded-full px-3 py-1">
+                <div className="w-1 h-1 rounded-full bg-gold/70" />
+                <span className="text-[10px] font-body font-medium text-gold/80">{f.metric}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -2753,6 +2933,7 @@ export default function Home() {
             <WhatsAppButton />
             <main>
               <Hero />
+              <BrandStripSection />
               <EstrategiaSection />
               <ObjecoesSection />
               <QuizInlineSection />
@@ -2764,6 +2945,7 @@ export default function Home() {
               <TestimonialsSection />
               <SystemsSection />
               <StrategistSection />
+              <FrentesSection />
               <FAQSection />
               <SobreNosSection />
             </main>
