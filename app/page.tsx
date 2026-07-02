@@ -1833,14 +1833,14 @@ function VideoCard({ v }: { v: VideoItem }) {
 // ── Audiovisual Section (Marquee Interativa) ──────────────────────
 function AudiovisualSection() {
   const videos: VideoItem[] = [
-    { id: 1, label: "Imobiliário · São Paulo",   videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777264337/FELIPE_CORRETOR_VIDEO_INTERNO_d532rl.mp4" },
-    { id: 2, label: "Veduta Residencial",         videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777264337/VEDUTA_RESIDENCIAL_dja1a3.mp4" },
-    { id: 3, label: "Felipe Corretor · Drone",   videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777264323/FELIPE_CORRETOR_DRONE_cpyx5l.mp4" },
-    { id: 4, label: "Lifestyle · Alto Padrão",   videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777264319/IMG_3618_f1cujq.mp4" },
-    { id: 5, label: "Colinas do Mosteiro",        videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777518266/Colinas_do_Mosteiro_de_Itaici_-_Indaiatuba_-_SPP_xxut6b.mp4" },
-    { id: 6, label: "Reserva Ermida",             videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777273275/Reserva_Ermida_-_Fl%C3%A1via_Pitorre_q7anoi.mp4" },
-    { id: 7, label: "Vila Rica · Indaiatuba",        videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777509420/.Casa_Condom%C3%ADnio_Vila_Rica_-_Indaiatuba_-_SP_unz6ze.mp4" },
-    { id: 8, label: "Helvetia Park · Indaiatuba", videoSrc: "https://res.cloudinary.com/dubbc2scp/video/upload/v1777509408/.Casas_Jardim_Residencial_Helvetia_Park-Indaiatuba_shycny.mp4" },
+    { id: 1, label: "Imobiliário · São Paulo",   videoSrc: "https://player.mediadelivery.net/play/695508/e2a645c3-7af9-4a7d-979e-f72d5bb69907" },
+    { id: 2, label: "Veduta Residencial",         videoSrc: "https://player.mediadelivery.net/play/695508/b96711b3-ea9c-4bc4-9afc-4e8c599c9d6e" },
+    { id: 3, label: "Felipe Corretor · Drone",   videoSrc: "https://player.mediadelivery.net/play/695508/04f363de-735c-4fbe-b70b-5b577c46c151" },
+    { id: 4, label: "Lifestyle · Alto Padrão",   videoSrc: "https://player.mediadelivery.net/play/695508/340e9e5a-9e47-4fa7-a5c7-23842c1c687e" },
+    { id: 5, label: "Colinas do Mosteiro",        videoSrc: "https://player.mediadelivery.net/play/695508/05c97387-7d2e-4807-b3b3-f55d7d97ceb3" },
+    { id: 6, label: "Reserva Ermida",             videoSrc: "https://player.mediadelivery.net/play/695508/4a28cb09-4a5b-46b2-9302-8fc70d6b5c7c" },
+    { id: 7, label: "Vila Rica · Indaiatuba",        videoSrc: "https://player.mediadelivery.net/play/695508/60c63f91-aac7-464b-959f-cd50fd68db72" },
+    { id: 8, label: "Helvetia Park · Indaiatuba", videoSrc: "https://player.mediadelivery.net/play/695508/9eec0a0d-fb75-47e5-ae10-ac56e3eec1ae" },
   ];
 
   // 3 cópias — loop seamless sem tranco
