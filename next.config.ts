@@ -16,8 +16,8 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "player.mediadelivery.net",
-        pathname: "/play/**",
+        hostname: "stream.mediadelivery.net",
+        pathname: "/695508/**",
       },
     ],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
