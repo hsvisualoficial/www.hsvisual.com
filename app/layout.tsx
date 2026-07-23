@@ -9,9 +9,12 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "HS Visual — Agência de Tráfego Pago & Automação | Sonhos que Vendem",
-  description:
-    "Agência de marketing digital especializada em tráfego pago (Meta Ads, Google Ads), automação de vendas e conteúdo estratégico. ROAS 8.4× comprovado. Marcas Triple A. Jundiaí, SP.",
+  title: "Agência de Tráfego Pago em Jundiaí | HS Visual",
+    description:
+          "Agência de marketing digital em Jundiaí especializada em tráfego pago, Meta Ads, Google Ads, sites, landing pages e automação para empresas.",
+    alternates: {
+          canonical: "https://hsvisual.com",
+    },
   keywords: [
     "agência marketing digital",
     "tráfego pago",
@@ -30,9 +33,9 @@ export const metadata: Metadata = {
     apple: "https://res.cloudinary.com/dubbc2scp/image/upload/v1777402760/01_hs_visual_logo_3d_jewelry-removebg-preview_n7txjl.png",
   },
   openGraph: {
-    title: "HS Visual — Agência de Tráfego Pago & Automação de Vendas",
-    description:
-      "Transformamos sua operação em máquina de vendas com tráfego pago estratégico e IA 24h. ROAS 8.4× comprovado para marcas de luxo.",
+    title: "Agência de Tráfego Pago em Jundiaí | HS Visual",
+        description:
+                "Agência de marketing digital em Jundiaí especializada em tráfego pago, Meta Ads, Google Ads, sites, landing pages e automação para empresas.",
     url: "https://hsvisual.com",
     siteName: "HS Visual",
     images: [
