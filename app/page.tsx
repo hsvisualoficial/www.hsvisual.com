@@ -317,7 +317,7 @@ function Hero() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={HELDER_PHOTO_A}
-        alt="Helder Show — Estrategista em Tráfego Pago, Meta Ads e Automação de Vendas para Marcas de Luxo"
+        alt="Helder Show — Estrategista em Tráfego Pago, Meta Ads e Automação de Vendas"
         className="absolute inset-0 w-full h-full select-none pointer-events-none"
         style={{ objectFit: "cover", objectPosition: "62% 10%" }}
         draggable={false}
@@ -354,7 +354,7 @@ function Hero() {
             className="font-display leading-[1.0] mb-1"
             style={{ fontSize: "clamp(2.2rem, 3.6vw, 3.8rem)", color: "#FFFFFF", letterSpacing: "-0.01em" }}
           >
-            Transformamos Sua Operação
+            Tráfego Pago, Sites e Automação
           </h1>
 
           <h2
@@ -366,7 +366,7 @@ function Hero() {
               textShadow: "0 0 48px rgba(197,164,103,0.20)",
             }}
           >
-            em uma Máquina de Vendas.
+            para Transformar Presença Digital em Oportunidades.
           </h2>
 
           {/* Micro-linha descritiva — contexto técnico sutil */}
@@ -2278,9 +2278,9 @@ function StrategistSection() {
               Helder Show
             </h2>
             <div className="space-y-5 font-body font-light text-cream/50 leading-relaxed text-[15px] max-w-lg">
-              <p>Construí a HS Visual com uma convicção: marcas de alto padrão merecem uma comunicação à altura do seu produto. Não aceito mediocridade — nem na estética, nem nos números.</p>
+              <p>Construí a HS Visual com uma convicção: cada negócio merece uma comunicação à altura do seu produto e do seu momento. Não aceito mediocridade — nem na estética, nem nos números.</p>
               <p>Passei anos estudando o que separa uma campanha que gasta de uma campanha que retorna. A resposta não está no volume — está na <span className="text-gold/80 font-normal">precisão cirúrgica</span> de cada decisão criativa e estratégica.</p>
-              <p>A HS Visual não atende todo mundo. Trabalhamos apenas com quem tem produto de alto padrão e está pronto para crescer. Se é você, vamos conversar.</p>
+              <p>A HS Visual atende negócios de diferentes segmentos que estão prontos para crescer com estratégia, com especialidade no mercado imobiliário. Se é você, vamos conversar.</p>
             </div>
             <div className="mt-10 flex flex-wrap gap-4">
               {[["12+", "Anos de experiência"], ["130+", "Marcas atendidas"], ["R$10M+", "Em capital gerenciado"]].map(([val, label]) => (
@@ -2432,7 +2432,7 @@ function SystemsSection() {
 const faqs = [
   {
     q: "Qual é o perfil de cliente que a HS Visual atende?",
-    a: "Empresários com produto de alto padrão e ticket médio elevado: imobiliário de luxo, especialistas em saúde, escritórios corporativos. Se você está validando o negócio do zero, não somos o momento certo — e não vamos fingir que somos.",
+    a: "Empresas e profissionais com negócio já estruturado que querem crescer com previsibilidade: negócios locais, prestadores de serviço, corretores e imobiliárias, e empresas de outros segmentos. Temos especialidade no mercado imobiliário, mas atendemos negócios de diferentes áreas. Se você está validando o negócio do zero, ainda não é o momento ideal para nós — e não vamos fingir que é.",
   },
   {
     q: "Como começa minha operação?",
@@ -2627,7 +2627,7 @@ function SobreNosSection() {
             <p className="font-body font-light text-cream/55 text-sm leading-relaxed mb-3">
               A HS Visual é um atelier de estratégia digital fundado por{" "}
               <span className="text-cream/80 font-medium">Helder Show</span>, sediado em Jundiaí/SP,
-              com operação 100% estruturada para atender marcas Triple A em qualquer estado do país.
+              com operação estruturada para atender negócios de diferentes segmentos, com especialidade no mercado imobiliário, em qualquer estado do país.
             </p>
             <p className="font-body font-light text-cream/35 text-sm leading-relaxed mb-6">
               Nossa operação é 100% digital e estruturada para entregar resultados em qualquer cidade do Brasil — sem depender de presença física.
@@ -2797,7 +2797,7 @@ function Footer() {
             <span className="text-cream/10">·</span>
             <a href="/privacidade" target="_blank" rel="noopener noreferrer"
               className="text-[10px] font-body font-light text-cream/30 hover:text-gold/70 transition-colors tracking-[0.15em] uppercase">
-              LGPD
+              LGPD</a><span className="text-cream/10">·</span><a href="/trafego-pago-jundiai" className="text-[10px] font-body font-light text-cream/30 hover:text-gold/70 transition-colors tracking-[0.15em] uppercase">Tráfego Pago em Jundiaí
             </a>
           </div>
         </div>
