@@ -79,7 +79,7 @@ export default function RootLayout({
                   "name": "HS Visual",
                   "alternateName": "HS Visual — Agência de Tráfego Pago",
                   "description":
-                    "Agência de marketing digital especializada em tráfego pago, automação de vendas e conteúdo estratégico para marcas de alto padrão",
+                    "Agência de marketing digital especializada em tráfego pago, automação de vendas e conteúdo estratégico para negócios de diferentes segmentos, com especialidade no mercado imobiliário",
                   "url": "https://hsvisual.com",
                   "logo": {
                     "@type": "ImageObject",
@@ -97,8 +97,7 @@ export default function RootLayout({
                     "name": "Helder Show",
                     "jobTitle": "Estrategista e Fundador",
                   },
-                  "foundingDate": "2014",
-                  "areaServed": "BR",
+                                    "areaServed": "BR",
                   "contactPoint": {
                     "@type": "ContactPoint",
                     "telephone": "+55-11-95361-1000",
@@ -111,7 +110,17 @@ export default function RootLayout({
                     "addressRegion": "SP",
                     "addressCountry": "BR",
                   },
-                  "priceRange": "$$$",
+                                  },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://hsvisual.com#website",
+                  "name": "HS Visual",
+                  "url": "https://hsvisual.com",
+                  "inLanguage": "pt-BR",
+                  "publisher": {
+                    "@type": "Organization",
+                    "@id": "https://hsvisual.com#organization"
+                  }
                 },
                 {
                   "@type": "LocalBusiness",
@@ -125,14 +134,13 @@ export default function RootLayout({
                     "addressCountry": "BR",
                   },
                   "telephone": "+55-11-95361-1000",
-                  "priceRange": "$$$",
-                },
+                                  },
                 {
                   "@type": "ProfessionalService",
                   "@id": "https://hsvisual.com#service",
                   "name": "Agência de Tráfego Pago e Automação de Vendas",
                   "description":
-                    "Gestão profissional de campanhas em Meta Ads, Google Ads, automação de leads com IA e conteúdo estratégico de alto padrão",
+                    "Gestão profissional de campanhas em Meta Ads, Google Ads, automação de leads com IA e conteúdo estratégico para negócios de diferentes segmentos",
                   "provider": {
                     "@type": "Organization",
                     "@id": "https://hsvisual.com#organization",
@@ -148,15 +156,6 @@ export default function RootLayout({
                   ],
                 },
                 {
-                  "@type": "AggregateRating",
-                  "@id": "https://hsvisual.com#rating",
-                  "ratingValue": "8.4",
-                  "bestRating": "10",
-                  "name": "ROAS Médio",
-                  "description": "Retorno sobre investimento médio em campanhas de tráfego pago",
-                  "ratingCount": "130",
-                },
-                {
                   "@type": "FAQPage",
                   "mainEntity": [
                     {
@@ -169,18 +168,10 @@ export default function RootLayout({
                     },
                     {
                       "@type": "Question",
-                      "name": "Qual é o ROAS médio da HS Visual?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "O ROAS (Return on Ad Spend) médio comprovado é de 8.4×, significando que cada R$ 1 investido em anúncios gera R$ 8.4 em faturamento.",
-                      },
-                    },
-                    {
-                      "@type": "Question",
                       "name": "Para quais marcas a HS Visual trabalha?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "A HS Visual especializa-se em marcas Triple A (alto padrão) com ticket médio elevado: imobiliário de luxo, saúde premium, corporativos. Atendemos todo o Brasil.",
+                        "text": "A HS Visual atende negócios de diferentes segmentos, com especialidade no mercado imobiliário (imobiliárias, corretores e lançamentos), além de negócios locais, prestadores de serviço e empresas de outras áreas. Atendimento presencial na região de Jundiaí/SP e remoto para todo o Brasil.",
                       },
                     },
                   ],
@@ -188,8 +179,8 @@ export default function RootLayout({
                 {
                   "@type": "VideoObject",
                   "@id": "https://hsvisual.com/#video-1",
-                  "name": "Case Tráfego Pago: Imobiliária São Paulo — Meta Ads com ROAS 8.4×",
-                  "description": "Vídeo case de sucesso: gestão profissional de tráfego pago e Meta Ads para imobiliária em São Paulo. Demonstra estratégia completa de lead generation e automação de vendas.",
+                  "name": "Case Tráfego Pago: Imobiliária São Paulo — Meta Ads",
+                  "description": "Vídeo case: gestão profissional de tráfego pago e Meta Ads para imobiliária em São Paulo. Demonstra estratégia de lead generation e automação de vendas.",
                   "uploadDate": "2026-07-02",
                   "duration": "PT5M",
                   "thumbnailUrl": "https://player.mediadelivery.net/play/695508/e2a645c3-7af9-4a7d-979e-f72d5bb69907",
@@ -215,10 +206,14 @@ export default function RootLayout({
           fbq('track', 'PageView');
         `}} /> */}
 
-        {/* Google Tag Manager — substituir pelo seu GTM ID */}
-        {/* <script dangerouslySetInnerHTML={{ __html: `
-          (function(w,d,s,l,i){...})(window,document,'script','dataLayer','GTM-XXXXXXX');
-        `}} /> */}
+        {/* Google Tag Manager */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-5JT983KF');
+        `}} />
 
         {/* Google Analytics GA4 — substituir pelo seu Measurement ID */}
         {/* <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" /> */}
@@ -233,6 +228,8 @@ export default function RootLayout({
         {/* <script dangerouslySetInnerHTML={{ __html: `...` }} /> */}
       </head>
       <body className="bg-void text-cream antialiased">
+        {/* Google Tag Manager (noscript) */}
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5JT983KF" height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe></noscript>
         <svg style={{ display: "none", position: "absolute" }} xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id="nobg">
