@@ -144,7 +144,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
             </div>
 
             <div className="mt-6 text-sm font-cormorant text-cream/20">
-              Sonhos que Vendem
+              Marketing Digital · Tráfego Pago · Sites · Automação
             </div>
           </div>
         </motion.div>
@@ -354,7 +354,7 @@ function Hero() {
             className="font-display leading-[1.0] mb-1"
             style={{ fontSize: "clamp(2.2rem, 3.6vw, 3.8rem)", color: "#FFFFFF", letterSpacing: "-0.01em" }}
           >
-            Tráfego Pago, Sites e Automação
+            Agência de Marketing Digital e Tráfego Pago em Jundiaí
           </h1>
 
           <h2
@@ -552,7 +552,7 @@ function BrandStripSection() {
             className="font-cormorant text-gold/60"
             style={{ fontSize: "14px", fontStyle: "italic", fontWeight: 300, letterSpacing: "0.05em" }}
           >
-            Sonhos que Vendem
+            Marketing Digital · Tráfego Pago · Sites · Automação
           </span>
         </div>
       </div>
