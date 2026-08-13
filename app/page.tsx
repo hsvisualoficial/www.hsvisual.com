@@ -419,7 +419,7 @@ function Hero() {
               textShadow: "0 0 48px rgba(197,164,103,0.20)",
             }}
           >
-            para Transformar Presença Digital em Oportunidades.
+                Sites, anúncios e automação para transformar presença digital em oportunidades e vendas.
           </h2>
 
           {/* Micro-linha descritiva — contexto técnico sutil */}
@@ -526,7 +526,7 @@ function Hero() {
                 className="font-body font-semibold"
                 style={{ fontSize: "0.70rem", color: "#C5A467" }}
               >
-                +R$ 10.000.000
+                                Estratégia sob medida
               </div>
               <div
                 className="font-body font-light"
@@ -536,7 +536,7 @@ function Hero() {
                   lineHeight: 1.3,
                 }}
               >
-                gerados para nossos clientes
+                                para negócios que buscam crescer
               </div>
             </div>
           </motion.div>
@@ -3257,7 +3257,7 @@ function SystemsSection() {
                 textTransform: "uppercase",
               }}
             >
-              Automação 24h · IA · CRM
+              Automação · IA · CRM
             </motion.p>
             <p className="font-body font-light text-cream/50 leading-relaxed max-w-md mb-8">
               Às 2h da manhã, um lead clica no seu anúncio. Em menos de 2
