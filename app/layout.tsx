@@ -12,8 +12,16 @@ export const metadata: Metadata = {
   title: "Agência de Tráfego Pago em Jundiaí | HS Visual",
     description:
           "Agência de marketing digital em Jundiaí especializada em tráfego pago, Meta Ads, Google Ads, sites, landing pages e automação para empresas.",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true
+    }
+  },
     alternates: {
-          canonical: "https://hsvisual.com",
+          canonical: "https://hsvisual.com/",
     },
   keywords: [
     "agência marketing digital",
@@ -36,7 +44,7 @@ export const metadata: Metadata = {
     title: "Agência de Tráfego Pago em Jundiaí | HS Visual",
         description:
                 "Agência de marketing digital em Jundiaí especializada em tráfego pago, Meta Ads, Google Ads, sites, landing pages e automação para empresas.",
-    url: "https://hsvisual.com",
+    url: "https://hsvisual.com/",
     siteName: "HS Visual",
     images: [
       {
